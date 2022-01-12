@@ -37,11 +37,12 @@ namespace Framework.Utilities
 			{
 				if (!paintedSquareDictionary.ContainsKey(roundedPos))
 				{
-					Square sq = new Square($"cell {roundedPos.X},{roundedPos.Y}", layer, gd, cellSize, cellColor, roundedPos);
+					Color c = new Color(roundedPos.X / 1000, roundedPos.Y / 1000, (roundedPos.X + roundedPos.Y)/ 2000);
+					Square sq = new Square($"cell {roundedPos.X},{roundedPos.Y}", layer, gd, cellSize, c, roundedPos);
 					ulong id = objectManager.Add(sq);
 					paintedSquareDictionary.Add(roundedPos, id);
-					Logger.PrintToUI("added {0} to layer {1}", sq.Name, sq.Layer);
-					Logger.DebugUIManager.AddObjectToDisplayer(id);
+					//Logger.PrintToUI("added {0} to layer {1}", sq.Name, sq.Layer);
+					//Logger.DebugUIManager.AddObjectToDisplayer(id);
 				} 
 			}
 		}

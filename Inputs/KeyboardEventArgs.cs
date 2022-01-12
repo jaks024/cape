@@ -1,23 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
 
 namespace Framework.Inputs
 {
-	public class InputEventArgs
+	public class KeyboardEventArgs
 	{
 		public Keys Key { get; set; }
-		public MouseState MouseState { get; set; }
-
-		public InputEventArgs(Keys key)
+		public KeyboardEventArgs(Keys key)
 		{
 			Key = key;
-		}
-		public InputEventArgs(MouseState mouseState)
-		{
-			MouseState = mouseState;
 		}
 	}
 }

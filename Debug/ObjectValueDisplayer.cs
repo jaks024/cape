@@ -38,11 +38,14 @@ namespace Framework.Debug
 		public Textbox Remove(ulong id)
 		{
 			--currentLine;
-
-			Textbox temp = objectsToShow[id];
-			objectsToShow.Remove(id);
-			RemoveChild(temp);
-			return temp;
+			if (objectsToShow.ContainsKey(id))
+			{
+				Textbox temp = objectsToShow[id];
+				objectsToShow.Remove(id);
+				RemoveChild(temp);
+				return temp;
+			}
+			return null;
 		}
 
 		public void Refresh()

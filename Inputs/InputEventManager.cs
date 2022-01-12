@@ -8,14 +8,17 @@ namespace Framework.Inputs
 {
 	public class InputEventManager
 	{
-		public delegate void InputEventHanlder(object sender, InputEventArgs args);
-		public event InputEventHanlder KeyboardEvent;
-
+		public delegate void KeyboardEventHanlder(object sender, KeyboardEventArgs args);
+		public delegate void MouseEventHandler(object sender, MouseEventArgs args);
+		public event KeyboardEventHanlder KeyboardEvent;
+		public event MouseEventHandler MouseEvent;
+		
 		private Dictionary<Keys, Keys> keyDictionary;
-
+		private Vector2 lastMousePosition;
 		public InputEventManager() 
 		{
 			keyDictionary = new Dictionary<Keys, Keys>();
+			lastMousePosition = Mouse.GetState().Position.ToVector2();
 		}
 
 		public bool AddKeyToListen(Keys bindedKey, Keys actualKey)
@@ -34,29 +37,34 @@ namespace Framework.Inputs
 			{
 				if (Keyboard.GetState().IsKeyDown(key))
 				{
-					KeyboardEvent?.Invoke(this, new InputEventArgs(keyDictionary[key]));
+					KeyboardEvent?.Invoke(this, new KeyboardEventArgs(keyDictionary[key]));
+				}
+			}
+
+			if (MouseEvent != null)
+			{
+				MouseState state = Mouse.GetState();
+				Vector2 mousePos = state.Position.ToVector2();
+				if (state.LeftButton.HasFlag(ButtonState.Pressed))
+					InvokeMouseEvent(MouseKeyStates.LeftPressed, mousePos);
+
+				if (state.RightButton.HasFlag(ButtonState.Pressed))
+					InvokeMouseEvent(MouseKeyStates.RightPressed, mousePos);
+
+				if (state.MiddleButton.HasFlag(ButtonState.Pressed))
+					InvokeMouseEvent(MouseKeyStates.MiddlePressed, mousePos);
+
+				if (!lastMousePosition.Equals(mousePos))
+				{
+					InvokeMouseEvent(MouseKeyStates.Nothing, mousePos);
+					lastMousePosition = mousePos;
 				}
 			}
 		}
 
-		public bool GetMouseLeftState(ButtonState state)
+		private void InvokeMouseEvent(MouseKeyStates state, Vector2 position)
 		{
-			return Mouse.GetState().LeftButton.HasFlag(state);
-		}
-
-		public bool GetMouseRightState(ButtonState state)
-		{
-			return Mouse.GetState().RightButton.HasFlag(state);
-		}
-
-		public bool GetMouseMiddleState(ButtonState state)
-		{
-			return Mouse.GetState().MiddleButton.HasFlag(state);
-		}
-
-		public Vector2 GetMousePosition()
-		{
-			return Mouse.GetState().Position.ToVector2();
+			MouseEvent?.Invoke(this, new MouseEventArgs(state, position));
 		}
 
 	}

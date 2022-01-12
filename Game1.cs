@@ -51,7 +51,7 @@ namespace Framework
 			objectRenderer = new Renderer(GraphicsDevice);
 			SpriteFont font = Content.Load<SpriteFont>("Fonts/defaultFont");
 
-			Logger.DebugUIManager =  new DebugUIManager("DEBUG", 5, objectRenderer);
+			Logger.DebugUIManager =  new DebugUIManager("DEBUG", 0, objectRenderer);
 			Logger.DebugUIManager.InitializeConsole(font, Color.DarkBlue, Color.White, new Vector2(300, 800), true);
 			Logger.DebugUIManager.SetConsolePosition(new Vector2(0, 25));
 
@@ -67,50 +67,45 @@ namespace Framework
 			inputManager.AddKeyToListen(Keys.A, Keys.A);
 			inputManager.AddKeyToListen(Keys.D, Keys.D);
 			inputManager.AddKeyToListen(Keys.W, Keys.S);
+			inputManager.AddKeyToListen(Keys.Escape, Keys.Escape);
 			inputManager.KeyboardEvent += InputManager_KeyboardEvent;
+			inputManager.MouseEvent += InputManager_MouseEvent;
 		}
 
-		private void InputManager_KeyboardEvent(object sender, InputEventArgs args)
+		private void InputManager_MouseEvent(object sender, MouseEventArgs args)
+		{
+			switch (args.MouseKeyState)
+			{
+				case MouseKeyStates.LeftPressed:
+					objPainter.Paint(args.Position, GraphicsDevice, "FOREGROUND");
+					break;
+				case MouseKeyStates.RightPressed:
+					objPainter.Erase(args.Position, "FOREGROUND");
+					break;
+				case MouseKeyStates.MiddlePressed:
+					objPainter.Clear();
+					break;
+			}
+		}
+
+		private void InputManager_KeyboardEvent(object sender, KeyboardEventArgs args)
 		{
 			Logger.PrintToUI("Key pressed: {0}", args.Key);
+
+			if (args.Key == Keys.Escape)
+			{
+				Exit();
+			}
 		}
 
 		protected override void Update(GameTime gameTime)
 		{
 			inputManager.Listen();
 
-			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-				Exit();
-
-
-			if (inputManager.GetMouseLeftState(ButtonState.Pressed)) 
-			{
-				//Logger.Print("x: {0}, y: {1}", mouseState.X, mouseState.Y);
-				objPainter.Paint(inputManager.GetMousePosition(), GraphicsDevice, "FOREGROUND");
-			}
-
-			if (inputManager.GetMouseRightState(ButtonState.Pressed))
-			{
-				objPainter.Erase(inputManager.GetMousePosition(), "FOREGROUND");
-			}
-
-			if (inputManager.GetMouseMiddleState(ButtonState.Pressed))
-			{
-				objPainter.Clear();
-			}
-
 			Logger.DebugUIManager.RefreshDisplayer();
-			//Logger.DebugUIManager.SetValueDisplayerPosition(mouseState.Position.ToVector2());
 
-			// move under mouse position
-			//fpsTextbox.Position = mouseState.Position.ToVector2();
+			UpdateFPS(gameTime);
 
-			lastRecordedGameTime += gameTime.ElapsedGameTime.TotalSeconds;
-			if (lastRecordedGameTime > 0.1f)
-			{
-				fpsTextbox.Text = $"fps: {(int)(1 / gameTime.ElapsedGameTime.TotalSeconds)}";
-				lastRecordedGameTime = 0;
-			}
 			base.Update(gameTime);
 		}
 
@@ -121,6 +116,16 @@ namespace Framework
 			objectRenderer.Draw();
 
 			base.Draw(gameTime);
+		}
+
+		private void UpdateFPS(GameTime gameTime)
+		{
+			lastRecordedGameTime += gameTime.ElapsedGameTime.TotalSeconds;
+			if (lastRecordedGameTime > 0.1f)
+			{
+				fpsTextbox.Text = $"fps: {(int)(1 / gameTime.ElapsedGameTime.TotalSeconds)}";
+				lastRecordedGameTime = 0;
+			}
 		}
 
 		private void AddFPSCounter(SpriteFont font)

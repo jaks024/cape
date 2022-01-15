@@ -8,7 +8,7 @@ namespace Framework.Objects
 {
 	public class Square : GameObject
 	{
-		public Square(string name, string layer, GraphicsDevice graphicsDevice, int size, Color color, Vector2 position) : base (name, layer)
+		public Square(string name, string layer, int size, Color color, Vector2 position) : base (name, layer)
 		{
 			Texture2D = Utilities.TextureFactory.SolidColor(size, size);
 			TextureColor = color;

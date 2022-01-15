@@ -7,6 +7,7 @@ using Framework.Objects.UI;
 using Framework.Managers;
 using Framework.Debug;
 using Framework.Inputs;
+using Framework.Objects.CellularAutomata;
 
 namespace Framework
 {
@@ -15,9 +16,13 @@ namespace Framework
 		private GraphicsDeviceManager graphics;
 		private ObjectPainter objPainter;
 
+		private CellMapGenerator cellMapGenerator;
+
+
 		private GameObjectManager globalGameObjectManager;
 		private Renderer objectRenderer;
 		private InputEventManager inputManager;
+
 		
 		// temp testing
 		private Textbox fpsTextbox;
@@ -60,6 +65,13 @@ namespace Framework
 			Logger.DebugUIManager.InitializeValueDisplayer(font, Color.DarkCyan, Color.White, new Vector2(700, 600), true, globalGameObjectManager);
 			Logger.DebugUIManager.SetValueDisplayerPosition(new Vector2(300, 25));
 
+
+			string mapLayer = "MAP";
+			objectRenderer.AddLayer(mapLayer, 10);
+			cellMapGenerator = new CellMapGenerator(0, mapLayer, globalGameObjectManager);
+			
+
+
 			AddTempSquares();
 			AddFPSCounter(font);
 
@@ -101,6 +113,7 @@ namespace Framework
 		protected override void Update(GameTime gameTime)
 		{
 			inputManager.Listen();
+			cellMapGenerator.Update();
 
 			Logger.DebugUIManager.RefreshDisplayer();
 
@@ -142,7 +155,7 @@ namespace Framework
 			string bgLayer = "BACKGROUND";
 			string fgLayer = "FOREGROUND";
 			objectRenderer.AddLayer(bgLayer, 1);
-			objectRenderer.AddLayer(fgLayer, 2);
+			objectRenderer.AddLayer(fgLayer, 15);
 
 			//for (int x = 0; x < 15; x++)
 			//{

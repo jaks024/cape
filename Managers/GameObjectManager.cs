@@ -20,6 +20,7 @@ namespace Framework.Managers
 		public ulong Add(GameObject go)
 		{
 			++objectIdCount;
+			go.Id = objectIdCount;
 			objectDictionary.Add(objectIdCount, go);
 			renderer.AddObjectToLayer(go.Layer, go);
 			return objectIdCount;
@@ -32,6 +33,12 @@ namespace Framework.Managers
 				renderer.RemoveObjectFromLayer(go.Layer, go);
 			}
 			return objectDictionary.Remove(id);
+		}
+
+		public bool Remove(GameObject go)
+		{
+			renderer.RemoveObjectFromLayer(go.Layer, go);
+			return objectDictionary.Remove(go.Id);
 		}
 
 		public GameObject Get(ulong id)

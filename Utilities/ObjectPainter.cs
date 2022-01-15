@@ -12,7 +12,6 @@ namespace Framework.Utilities
 {
 	public class ObjectPainter
 	{
-		private Color cellColor = Color.Aqua;
 		private const int cellSize = 10;
 		private Dictionary<Vector2, ulong> paintedSquareDictionary;
 		private GameObjectManager objectManager;
@@ -38,7 +37,7 @@ namespace Framework.Utilities
 				if (!paintedSquareDictionary.ContainsKey(roundedPos))
 				{
 					Color c = new Color(roundedPos.X / 1000, roundedPos.Y / 1000, (roundedPos.X + roundedPos.Y)/ 2000);
-					Square sq = new Square($"cell {roundedPos.X},{roundedPos.Y}", layer, gd, cellSize, c, roundedPos);
+					Square sq = new Square($"cell {roundedPos.X},{roundedPos.Y}", layer, cellSize, c, roundedPos);
 					ulong id = objectManager.Add(sq);
 					paintedSquareDictionary.Add(roundedPos, id);
 					//Logger.PrintToUI("added {0} to layer {1}", sq.Name, sq.Layer);
@@ -53,6 +52,7 @@ namespace Framework.Utilities
 			{
 				objectManager.Remove(id);
 				Logger.DebugUIManager.RemoveObjectFromDisplayer(id);
+				paintedSquareDictionary.Remove(GetRoundedPosition(mousePosition));
 			}
 		}
 

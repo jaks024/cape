@@ -122,7 +122,7 @@ namespace Framework.Rendering
 
 				foreach(IRenderable obj in layer.Drawables)
 				{
-					spriteBatch.Begin(SpriteSortMode.BackToFront);
+					spriteBatch.Begin(SpriteSortMode.Texture);
 					//Logger.Print("drawing object: {0}", obj.Name);
 					switch (obj.RenderMode)
 					{

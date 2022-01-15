@@ -2,14 +2,15 @@
 Cellular Automata Pixel simulation 2D game Engine
 
 ## Current Goal
-Create maps where each pixel is capable of being simulated and can behaves like how it is in the game Noita
+Dynamically drawn map made with simulated pixel objects that reacts to its surrounding environemnt. 
 
-## TO-DOS (Short Term)
+## TO-DOS - Main Points (Short Term)
 - Game Object Management (Works)
 - Rendering (Works)
-- UI (Next thing to work on)
+- UI (Can display text with background color)
   - Debug UI
 - Audio
+- Cellular Automata Base Components (base structure done)
 - Attachable Components
   - Colliders
 - Simple testing tools 

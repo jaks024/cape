@@ -1,6 +1,8 @@
 # CAPE
 Cellular Automata Pixel simulation 2D game Engine
 
+# THIS PROJECT IS A PROTOTYPE FOR [RAIN](https://github.com/jaks024/rain) 
+
 ## Current Goal
 Dynamically drawn map made with simulated pixel objects that reacts to its surrounding environemnt. 
 
